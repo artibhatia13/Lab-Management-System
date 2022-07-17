@@ -5,14 +5,16 @@ export default function Navbar() {
   return (
     <Flex my="auto" justify="space-between" px="2.5em" py="1.5em">
       <Link href="/">
-        <Image src="/logo.png" alt="doc_img" h="2em" />
+        <Image src="/logo.png" alt="doc_img" h="2em" cursor="pointer" />
       </Link>
       <Flex py="0.5em">
-        <Link href="/login">
-          <Text mx="2em">Admin</Text>
+        <Link href="/admin">
+          <Text mx="2em" cursor="pointer">
+            Admin
+          </Text>
         </Link>
         <Link href="/login">
-          <Text>Student</Text>
+          <Text cursor="pointer">Student</Text>
         </Link>
       </Flex>
     </Flex>

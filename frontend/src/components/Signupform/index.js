@@ -23,7 +23,7 @@ export default function Signupform() {
           bg="#87C0CD"
           borderRadius="50em"
         ></Box>
-        <Box mt="3em" w="20em" mx="auto">
+        <Box mt="3em" w="100%" mx="auto">
           <Input placeholder="Name" h="3em" />
           <Input placeholder="Email" mt="1.5em" h="3em" />
           <Input placeholder="Password" mt="1.5em" h="3em" />
