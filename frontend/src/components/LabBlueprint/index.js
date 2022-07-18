@@ -49,13 +49,20 @@ export default function LabBlueprint() {
 
   const displaySystem_val = (val, row, col) => {
     if (val === null)
-      return <Image src="/empty.png" h="1.5em" mx="0.5em" mb="1em" key={col} />;
+      return <Box key={col} mx="0.49em" h="1.5em" mb="1em" w="1.9em"></Box>;
     else if (val == -1)
       return (
         <>
           <Popover>
             <PopoverTrigger>
-              <Image src="/fault.png" h="1.5em" mx="0.5em" mb="1em" key={col} />
+              <Image
+                cursor="pointer"
+                src="/fault.png"
+                h="1.5em"
+                mx="0.5em"
+                mb="1em"
+                key={col}
+              />
             </PopoverTrigger>
             <PopoverContent>
               <PopoverArrow />

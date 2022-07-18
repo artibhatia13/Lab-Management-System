@@ -7,3 +7,4 @@ export { default as Heading } from "./Heading";
 export { default as LabDetails } from "./LabDetails";
 export { default as EquipmentDetails } from "./EquipmentDetails";
 export { default as LabBlueprint } from "./LabBlueprint";
+export { default as Timetable } from "./Timetable";

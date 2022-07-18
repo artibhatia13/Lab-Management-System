@@ -8,12 +8,12 @@ export default function AdminNav() {
         <Image cursor="pointer" src="/logo.png" alt="doc_img" h="2em" />
       </Link>
       <Flex py="0.5em">
-        <Link href="/">
+        <Link href="/admin/course">
           <Text cursor="pointer" mx="1em">
             courses
           </Text>
         </Link>
-        <Link href="/labs">
+        <Link href="/admin/lab">
           <Text cursor="pointer" mx="1em">
             labs
           </Text>

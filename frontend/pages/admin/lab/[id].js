@@ -6,6 +6,7 @@ import {
   LabDetails,
   EquipmentDetails,
   LabBlueprint,
+  Timetable,
 } from "../../../src/components";
 
 export default function Lab() {
@@ -17,6 +18,8 @@ export default function Lab() {
         <LabDetails />
         <Heading text="All equipments of Lab (Computer Lab 1 details)" />
         <EquipmentDetails />
+        <Heading text="Time Table" />
+        <Timetable />
         <Heading text="Working Condition" />
         <LabBlueprint />
       </Box>
