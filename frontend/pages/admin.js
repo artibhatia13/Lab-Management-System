@@ -20,6 +20,7 @@ import { AddIcon } from "@chakra-ui/icons";
 
 export default function Admin() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  
   const labs = [
     {
       id: 1,

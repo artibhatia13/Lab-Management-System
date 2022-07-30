@@ -18,18 +18,26 @@ const labschema = mongoose.Schema({
         trim:true,
     },
 
-    l_description:[{
+    l_location:{
         type:String,
-    }],
+        required:true,
+        trim:true
+    },
+
+    l_sysno:{
+        type: Number
+    },
+
+    l_description:{
+        type:String,
+    },
 
     l_systems:[{
         s_id:{
-            type:Number,
-            required:true,
+            type:Number
         },
         s_status:{
-            type:Boolean,
-            required:true,
+            type:Boolean
         }
     }],
     availableDays: {
