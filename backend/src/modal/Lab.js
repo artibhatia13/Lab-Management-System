@@ -10,6 +10,7 @@ const labschema = mongoose.Schema({
     l_code:{
         type:String,
         required:true,
+        unique:true,
     },
 
     l_manager:{

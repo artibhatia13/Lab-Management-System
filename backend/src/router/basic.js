@@ -3,6 +3,7 @@ const router = express.Router()
 
 const Student = require('../modal/Student')
 const Lab = require('../modal/Lab')
+const { rawListeners } = require('../modal/Student')
 
 router.post('/', (req, res) => {
     success = {
@@ -62,7 +63,7 @@ router.post('/create_lab', async (req, res) => {
 
 router.get('/lab_list', async (req, res) => {
     try {
-        const labs = await Lab.find().select([])
+        const labs = await Lab.find().select(["l_name","l_code"])
 
         if (labs.length !== 0) {
             let success = {
@@ -86,5 +87,33 @@ router.get('/lab_list', async (req, res) => {
         res.status(404).json({ status: false, err: "No User Or Server Error" })
     }
 
+})
+
+router.get('/lab/:id', async(req,res) =>{
+    try{
+        console.log(req.params);
+        const lab= await Lab.find( {l_code : req.params.id}).select([])
+        // console.log(lab);
+        if(lab.length != 0){
+            let success= {
+                status:true,
+                data:lab[0],
+            }
+            res.status(200).json(success)
+        }
+        else{
+            let success={
+                status:false,
+                message:"Could not find the Lab",
+                data:{}
+            }
+            res.status(200).json(success)
+
+        }
+    }
+    catch(err){
+        res.status(404).json({ status:false, err:"Server Error"})
+
+    }
 })
 module.exports = router

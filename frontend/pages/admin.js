@@ -76,6 +76,7 @@ const handleSubmit = () => {
   .then(function (response) {
       if (response.data.status === true) {
         alert("Lab added successfully")
+        setlabList(labList =>[...labList, response.data.lab])
       }
       else {
           alert("Error in details")
