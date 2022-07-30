@@ -10,3 +10,4 @@ export { default as Timetable } from "./Timetable";
 export { default as CourseDetails } from "./CourseDetails";
 export { default as AssignmentPage } from "./AssignmentPage";
 export { default as Attendance } from "./Attendance";
+export { default as StudentNav } from "./StudentNav";
