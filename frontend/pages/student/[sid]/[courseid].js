@@ -1,7 +1,7 @@
 import { Box } from "@chakra-ui/react";
-
+import { useRouter } from "next/router";
 import {
-  AdminNav,
+  StudentNav,
   Timetable,
   CourseDetails,
   AssignmentPage,
@@ -9,7 +9,10 @@ import {
 } from "../../../src/components";
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 
-export default function Lab() {
+export default function StCourse() {
+  const router = useRouter();
+  const { courseid } = router.query;
+
   const tabsStyles = {
     color: "#58B5CA",
     borderBottom: "2px",
@@ -18,7 +21,7 @@ export default function Lab() {
 
   return (
     <Box bg="#fafafa">
-      <AdminNav />
+      <StudentNav />
       <Box mx="6em" mt="3em" mb="0em">
         <Tabs>
           <TabList>
@@ -33,7 +36,7 @@ export default function Lab() {
               <CourseDetails />
             </TabPanel>
             <TabPanel>
-              <Timetable twidth="90%" />
+              <Timetable cName={courseid} />
             </TabPanel>
             <TabPanel>
               <AssignmentPage />

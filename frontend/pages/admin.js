@@ -5,8 +5,7 @@ import {
   useDisclosure,
   Input,
   Text,
-} from "@chakra-ui/react";
-import {
+  Image,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -17,6 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { AdminNav, Card, Heading } from "../src/components";
 import { AddIcon } from "@chakra-ui/icons";
+import Link from "next/link";
 
 export default function Admin() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -47,7 +47,24 @@ export default function Admin() {
         <Flex>
           {labs.map((item) => (
             <Box key={item.id}>
-              <Card img={item.img} text={item.name} id={item.id} />
+              <Link href={"/admin/lab/" + item.id}>
+                <Box
+                  boxShadow="lg"
+                  bg="white"
+                  w="20em"
+                  mr="3em"
+                  cursor="pointer"
+                  borderRadius="6px"
+                >
+                  <Image
+                    src={item.img}
+                    h="15em"
+                    objectFit="cover"
+                    borderRadius="6px 6px 0 0"
+                  />
+                  <Text p="1em">{item.name}</Text>
+                </Box>
+              </Link>
             </Box>
           ))}
         </Flex>
