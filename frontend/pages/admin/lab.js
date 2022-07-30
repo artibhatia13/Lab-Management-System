@@ -93,9 +93,9 @@ export default function Lab() {
       <Box mx="5em" my="3em">
         <Heading text="All labs" />
         <Flex>
-          {labs.map((item) => (
-            <Box key={item.id}>
-              <Link href={"/admin/lab/" + item.id}>
+          {labList.map((item) => (
+            <Box key={item.l_code}>
+              <Link href={"/admin/lab/" + item.l_code}>
                 <Box
                   boxShadow="lg"
                   bg="white"
@@ -104,13 +104,13 @@ export default function Lab() {
                   cursor="pointer"
                   borderRadius="6px"
                 >
-                  <Image
+                  {/* <Image
                     src={item.img}
                     h="15em"
                     objectFit="cover"
                     borderRadius="6px 6px 0 0"
-                  />
-                  <Text p="1em">{item.name}</Text>
+                  /> */}
+                  <Text p="1em">{item.l_name}</Text>
                 </Box>
               </Link>
             </Box>
@@ -148,7 +148,7 @@ export default function Lab() {
                 my="1.5em"
                 w="100%"
                 textAlign="center"
-                onClick={() => handleSubmit()}
+                onClick={handleSubmit}
               >
                 Add
               </Button>

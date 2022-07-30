@@ -17,27 +17,77 @@ import {
 import { AdminNav, Card, Heading } from "../src/components";
 import { AddIcon } from "@chakra-ui/icons";
 import Link from "next/link";
+import { useState, useEffect } from "react";
+import axios from 'axios';
+import backend from "../const";
 
 export default function Admin() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [labList, setlabList] = useState([])
+  const [name, setName] = useState('')
+  const [manager, setManager] = useState('')
+  const [ location, setLocation] = useState('')
+  const [description, setDescription] = useState('')
+  const [sysno , setSysno] = useState('')
+  const [code, setCode] = useState('')
+
   
-  const labs = [
-    {
-      id: 1,
-      name: "Computer Lab 1",
-      img: "lab1.jpg",
-    },
-    {
-      id: 2,
-      name: "Computer Lab 2",
-      img: "lab2.jpg",
-    },
-    {
-      id: 3,
-      name: "Computer Lab 3",
-      img: "lab3.jpg",
-    },
-  ];
+  useEffect(() => {
+    async function fetchData(){
+    const response = await axios.get(`${backend}/lab_list`)
+    const res = response.data;
+    if (res.status) {
+        
+        const resArray = res.labs
+        setlabList(resArray);
+        if(res.msg)
+            alert(res.msg)
+    }
+    else {
+        alert('Sorry could not retrieve Lab list')
+    }
+    }
+    fetchData();
+
+}, [])
+
+const handleSubmit = () => {
+  const reqData = {
+      "l_name":name,
+      "l_manager":manager,
+      "l_description":description,
+      "l_sysno":sysno,
+      "l_location": location,
+      "l_code":code,
+  }
+
+  console.log(reqData)
+
+  var config = {
+      method: 'post',
+      url: `${backend}/create_lab`,
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      data: reqData
+  };
+
+  axios(config)
+  .then(function (response) {
+      if (response.data.status === true) {
+        alert("Lab added successfully")
+      }
+      else {
+          alert("Error in details")
+      }
+      onClose()
+  })
+  .catch(function (error) {
+      alert("Error in adding Lab")
+      onClose()
+  });
+  
+}
 
   return (
     <Box bg="#fafafa">
@@ -45,9 +95,9 @@ export default function Admin() {
       <Box mx="5em" my="3em">
         <Heading text="All labs" />
         <Flex>
-          {labs.map((item) => (
-            <Box key={item.id}>
-              <Link href={"/admin/lab/" + item.id}>
+          {labList.map((item) => (
+            <Box key={item.l_code}>
+              <Link href={"/admin/lab/" + item.l_code}>
                 <Box
                   boxShadow="lg"
                   bg="white"
@@ -56,13 +106,13 @@ export default function Admin() {
                   cursor="pointer"
                   borderRadius="6px"
                 >
-                  <Image
+                  {/* <Image
                     src={item.img}
                     h="15em"
                     objectFit="cover"
                     borderRadius="6px 6px 0 0"
-                  />
-                  <Text p="1em">{item.name}</Text>
+                  /> */}
+                  <Text p="1em">{item.l_name}</Text>
                 </Box>
               </Link>
             </Box>
@@ -87,11 +137,12 @@ export default function Admin() {
           <ModalHeader textAlign="center">Add Lab</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Input placeholder="Name" />
-            <Input placeholder="Manager Name" mt="1em" />
-            <Input placeholder="Location" mt="1em" />
-            <Input placeholder="Description" mt="1em" />
-            <Input placeholder="No of Sytems" mt="1em" />
+          <Input placeholder="Name" value={name} onChange={e=> setName(e.target.value)} />
+            <Input placeholder="Lab code" value={code} mt="1em" onChange={e=> setCode(e.target.value)}/>
+            <Input placeholder="Manager Name" value={manager} mt="1em" onChange={e=> setManager(e.target.value)}/>
+            <Input placeholder="Location" value={location} mt="1em" onChange={e=> setLocation(e.target.value)}/>
+            <Input placeholder="Description" value={description} mt="1em" onChange={e=> setDescription(e.target.value)}/>
+            <Input placeholder="No of Sytems" value={sysno} mt="1em" onChange={e=> setSysno(e.target.value)}/>
             <Box ml="auto" w="6em">
               <Button
                 bg="#87C0CD"
@@ -99,7 +150,7 @@ export default function Admin() {
                 my="1.5em"
                 w="100%"
                 textAlign="center"
-                onClick={onClose}
+                onClick={() => handleSubmit()}
               >
                 Add
               </Button>
