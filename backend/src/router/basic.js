@@ -59,7 +59,7 @@ router.post('/create_lab', async (req, res) => {
     }
 })
 
-//get all labs
+//get all labs(list labs)
 
 router.get('/lab_list', async (req, res) => {
     try {
@@ -89,9 +89,11 @@ router.get('/lab_list', async (req, res) => {
 
 })
 
+
+// lab details
 router.get('/lab/:id', async(req,res) =>{
     try{
-        console.log(req.params);
+        // console.log(req.params);
         const lab= await Lab.find( {l_code : req.params.id}).select([])
         // console.log(lab);
         if(lab.length != 0){
@@ -116,4 +118,34 @@ router.get('/lab/:id', async(req,res) =>{
 
     }
 })
+
+// add systems to a specific lab
+
+router.post('/add_sys/:id', async(req,res) =>{
+    const lsystem= req.body
+    console.log(lsystem);
+    try{
+        const sysnew= await Lab.findOneAndUpdate({l_code:req.params.id},{...lsystem})
+        if (sysnew) {
+            let success = {
+                status: true,
+                msg: "Lab System Added successfully",
+                sysnew:sysnew
+            }
+            res.status(200).send(success)
+        }
+        else {
+            let success = {
+                status: false,
+                msg: "Lab System could not be added successfully",
+            }
+            res.status(200).send(success)
+        }
+
+    }
+    catch (error) {
+        res.status(400).json({ err: "Lab system could not be added due to error" })
+    }
+})
+
 module.exports = router

@@ -77,6 +77,12 @@ const handleSubmit = () => {
       if (response.data.status === true) {
         alert("Lab added successfully")
         setlabList(labList =>[...labList, response.data.lab])
+        setName('')
+        setManager('')
+        setSysno('')
+        setLocation('')
+        setCode('')
+        setDescription('')
       }
       else {
           alert("Error in details")
@@ -84,7 +90,14 @@ const handleSubmit = () => {
       onClose()
   })
   .catch(function (error) {
+     console.log(error)
       alert("Error in adding Lab")
+      setName('')
+      setManager('')
+      setSysno('')
+      setLocation('')
+      setCode('')
+      setDescription('')
       onClose()
   });
   
@@ -143,7 +156,7 @@ const handleSubmit = () => {
             <Input placeholder="Manager Name" value={manager} mt="1em" onChange={e=> setManager(e.target.value)}/>
             <Input placeholder="Location" value={location} mt="1em" onChange={e=> setLocation(e.target.value)}/>
             <Input placeholder="Description" value={description} mt="1em" onChange={e=> setDescription(e.target.value)}/>
-            <Input placeholder="No of Sytems" value={sysno} mt="1em" onChange={e=> setSysno(e.target.value)}/>
+            <Input placeholder="No of Systems" value={sysno} mt="1em" onChange={e=> setSysno(e.target.value)}/>
             <Box ml="auto" w="6em">
               <Button
                 bg="#87C0CD"

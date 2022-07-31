@@ -35,10 +35,14 @@ const labschema = mongoose.Schema({
 
     l_systems:[{
         s_id:{
-            type:Number
+            type:Number,
+            
         },
         s_status:{
             type:Boolean
+        },
+        s_problem:{
+            type:String,
         }
     }],
     availableDays: {

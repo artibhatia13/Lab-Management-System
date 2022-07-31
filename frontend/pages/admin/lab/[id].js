@@ -18,12 +18,13 @@ export default function Lab() {
   const router = useRouter()
   const [lab,setLab]= useState('')
   // const [load,setLoad]= useState(false)
-  
+  const [id,setId]=useState('')
   
   useEffect(()=>{
     if(!router.isReady) return;
     const { id } = router.query
-    console.log(id)
+    // console.log(id)
+    setId(id)
     async function fetchData(){
     const response = await axios.get(`${backend}/lab/${id}`)
     const res = response.data;
@@ -55,12 +56,12 @@ export default function Lab() {
       <Box mx="5em" my="3em">
         <Heading text={`Computer Lab ${lab.l_code} details`} />
         <LabDetails lab={lab}/>
+        {/* <Heading text="Time Table" />
+        <Timetable tt={lab.availableDays}/> */}
         <Heading text="All equipments of Lab (Computer Lab 1 details)" />
-        <EquipmentDetails />
-        <Heading text="Time Table" />
-        <Timetable />
-        <Heading text="Working Condition" />
-        <LabBlueprint />
+        <EquipmentDetails lab={lab} id={id}/>
+        {/* <Heading text="Working Condition" />
+        <LabBlueprint /> */}
       </Box>
     </Box>
   );
