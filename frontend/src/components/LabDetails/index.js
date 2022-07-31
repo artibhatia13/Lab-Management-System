@@ -1,31 +1,31 @@
 import { Box, Text, Flex, Image } from "@chakra-ui/react";
 
-export default function LabDetails() {
+export default function LabDetails(props) {
   const details = [
     {
       id: 1,
       title: "Name",
-      text: "Computer Lab 2",
+      text: `${props.lab.l_name}`,
     },
     {
       id: 2,
       title: "Manager Name",
-      text: "Aysha Fymin Majeed",
+      text: `${props.lab.l_manager}`,
     },
     {
       id: 3,
       title: "Location",
-      text: "Second Floor",
+      text: `${props.lab.l_location}`,
     },
     {
       id: 4,
       title: "Description",
-      text: "Mini Project, Microprocessor Lab, C Lab",
+      text: `${props.lab.l_description}`,
     },
     {
       id: 5,
       title: "Number of System",
-      text: "23",
+      text: `${props.lab.l_sysno}`,
     },
   ];
 

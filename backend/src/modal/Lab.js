@@ -10,6 +10,7 @@ const labschema = mongoose.Schema({
     l_code:{
         type:String,
         required:true,
+        unique:true,
     },
 
     l_manager:{
@@ -18,18 +19,30 @@ const labschema = mongoose.Schema({
         trim:true,
     },
 
-    l_description:[{
+    l_location:{
         type:String,
-    }],
+        required:true,
+        trim:true
+    },
+
+    l_sysno:{
+        type: Number
+    },
+
+    l_description:{
+        type:String,
+    },
 
     l_systems:[{
         s_id:{
             type:Number,
-            required:true,
+            
         },
         s_status:{
-            type:Boolean,
-            required:true,
+            type:Boolean
+        },
+        s_problem:{
+            type:String,
         }
     }],
     availableDays: {
