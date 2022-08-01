@@ -36,6 +36,7 @@ const labschema = mongoose.Schema({
     l_systems:[{
         s_id:{
             type:Number,
+            unique:true
             
         },
         s_status:{

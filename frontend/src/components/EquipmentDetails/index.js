@@ -17,6 +17,10 @@ import backend from "../../../const";
 
 export default function EquipmentDetails(props) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const modal1 = useDisclosure()
+  const [ upSys, setUpSys] = useState('')
+  const [currModal, setCurrModal] = useState(null)
+  const [ upProb , setUpProb] = useState('')
   const [ sysid,setSysid] = useState('')
   const [ sysstat,setSysstat] = useState(false)
   const [ sysprob, setSysprob] = useState('')
@@ -52,18 +56,18 @@ export default function EquipmentDetails(props) {
 
   useEffect(()=>{
     setSysList(props.lab.l_systems)
-    console.log(props.lab)
-    console.log(props)
+    // console.log(props.lab)
+    // console.log(props)
     // console.log(sysList)
   },[])
 
-  useEffect(()=>{
-    console.log(sysList)
-  },[sysList])
+  // useEffect(()=>{
+  //   console.log(sysList)
+  // },[sysList])
 
-  useEffect(()=>{
-    // console.log(sysstat)
-  },[sysstat])
+  // useEffect(()=>{
+  //   console.log(sysstat)
+  // },[sysstat])
 
 
 const handleSubmit = () => {
@@ -73,13 +77,14 @@ const handleSubmit = () => {
     s_problem: sysprob
 
   }
-  console.log(newSys)
+  // console.log(sysstat)
+  // console.log(newSys)
   const reqData = props.lab
   const reqId = props.id
-
+  reqData.l_sysno=reqData.l_sysno+1
   reqData.l_systems = [...reqData.l_systems, newSys]
 
-  console.log(reqData)
+  // console.log(reqData)
 
   var config = {
       method: 'post',
@@ -93,9 +98,12 @@ const handleSubmit = () => {
   axios(config)
   .then(function (response) {
       if (response.data.status === true) {
-        console.log(response.data)
+        // console.log(response.data)
         alert("Lab System added successfully")
-        setSysList(response.data.lab.l_systems)
+        setSysList([...sysList,newSys])
+        setSysid('')
+        setSysprob('')
+        setSysstat('')
       }
       else {
           alert("Error in details")
@@ -108,6 +116,52 @@ const handleSubmit = () => {
   });
   
 }
+
+const handleReport = (item={}) => {
+  const newSys = {
+    s_id : item.s_id,
+    s_status: !item.s_status,
+    s_problem: upProb
+
+  }
+  console.log(newSys)
+  const reqData = newSys
+  const reqId = props.id
+  // reqData.l_systems = [...reqData.l_systems, newSys]
+
+  // console.log(reqData)
+
+  var config = {
+      method: 'post',
+      url: `${backend}/update_sys/${reqId}`,
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      data: reqData
+  };
+
+  axios(config)
+  .then(function (response) {
+      if (response.data.status === true) {
+        console.log(response.data)
+        alert("Lab System updated added successfully")
+        setSysList(response.data.lab.l_systems)
+        setCurrModal(null)
+        setUpProb('')
+        setUpSys('')
+      }
+      else {
+          alert("Error in details")
+      }
+      modal1.onClose()
+  })
+  .catch(function (error) {
+      alert("Error in updating System")
+      modal1.onClose()
+  });
+  
+}
+
 
 
 
@@ -149,7 +203,7 @@ const handleSubmit = () => {
               fontSize="14px"
               fontWeight="500"
             >
-              System ID :
+              System Status :
             </Text>
             <Text
               border="1px"
@@ -161,6 +215,71 @@ const handleSubmit = () => {
             >
               {item.s_status?"Working Properly":item.s_problem}
             </Text>
+          </Flex>
+          <Flex w="100%">
+            <Button
+            mt="2em"
+            px="1em"
+            h="2em"
+            bg="#87C0CD"
+            color="red"
+            borderRadius="3em"
+          
+            
+            >
+              Delete
+            </Button>
+            {!item.s_status?
+            <Button
+            mt="2em"
+            px="1em"
+            h="2em"
+            bg="#87C0CD"
+            color="red"
+            borderRadius="3em"
+            onClick={() => { handleReport(item) }}
+            
+            >
+              fix
+            </Button>
+            :
+            <Button
+            mt="2em"
+            px="1em"
+            h="2em"
+            bg="#87C0CD"
+            color="red"
+            borderRadius="3em"
+            onClick={() => {setCurrModal(item) ; modal1.onOpen()}}
+            
+            >
+              report
+            </Button>}
+
+            {currModal && <Modal isOpen={modal1.isOpen} onClose={modal1.onClose}>
+              <ModalOverlay />
+              <ModalContent mt="7em">
+                <ModalHeader textAlign="center">Update System {currModal.s_id} Problem</ModalHeader>
+                <ModalCloseButton />
+                <ModalBody>
+                  {/* <Input placeholder="System Id:"  mt="1em" /> */}
+                  <Input placeholder="System Id:" value={currModal.s_id} mt="1em" onChange={(e) => setUpSys(e.target.value)} hidden={true}/>
+                  <Input placeholder="System Prob" value={upProb} mt="1em" onChange={e=> setUpProb(e.target.value)}/>                 
+                  <Box ml="auto" w="6em">
+                    <Button
+                      bg="#87C0CD"
+                      color="white"
+                      my="1.5em"
+                      w="100%"
+                      textAlign="center"
+                      onClick={() => handleReport(currModal)}
+                    >
+                      Update
+                    </Button>
+                  </Box>
+                </ModalBody>
+              </ModalContent>
+            </Modal>}
           </Flex>
         </Box>
       </Flex>
