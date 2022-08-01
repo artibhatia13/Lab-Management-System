@@ -11,7 +11,7 @@ import { Box, Text, Flex, Image,
   ModalCloseButton,} from "@chakra-ui/react";
   import { AddIcon } from "@chakra-ui/icons";
 import imag from '../../../public/monitor.png'
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import axios from 'axios';
 import backend from "../../../const";
 
@@ -26,6 +26,7 @@ export default function EquipmentDetails(props) {
   const [ sysprob, setSysprob] = useState('')
   const [ sysList, setSysList] = useState([])
   const [ newSys, setNewSys] = useState('')
+  const inputRef = useRef(null)
   const [equipments,setEquipments] = useState([
     {
       s_id: 123424221,
@@ -162,7 +163,45 @@ const handleReport = (item={}) => {
   
 }
 
+const handleDelete = (item) => {
+  
+  const newSys = {
+    s_id : item.s_id,
+    l_sysno: props.lab.l_sysno-1,
 
+  }
+  const reqData = newSys
+  console.log(reqData)
+  const reqId = props.id
+  // reqData.l_systems = [...reqData.l_systems, newSys]
+
+  // console.log(reqData)
+
+  var config = {
+      method: 'post',
+      url: `${backend}/delete_sys/${reqId}`,
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      data: reqData
+  };
+
+  axios(config)
+  .then(function (response) {
+      if (response.data.status === true) {
+        console.log(response.data)
+        alert("Lab System deleted successfully")
+      }
+      else {
+          alert("Error in details")
+      }
+      
+  })
+  .catch(function (error) {
+      alert("Error in Deleted System")
+  });
+  
+}
 
 
   const displayrow = (arr) =>
@@ -224,7 +263,7 @@ const handleReport = (item={}) => {
             bg="#87C0CD"
             color="red"
             borderRadius="3em"
-          
+            onClick={() => { handleDelete(item) }}
             
             >
               Delete
@@ -264,7 +303,7 @@ const handleReport = (item={}) => {
                 <ModalBody>
                   {/* <Input placeholder="System Id:"  mt="1em" /> */}
                   <Input placeholder="System Id:" value={currModal.s_id} mt="1em" onChange={(e) => setUpSys(e.target.value)} hidden={true}/>
-                  <Input placeholder="System Prob" value={upProb} mt="1em" onChange={e=> setUpProb(e.target.value)}/>                 
+                  <Input ref = {inputRef} placeholder="System Prob" value={upProb} mt="1em" onChange={e=> setUpProb(e.target.value)} required="true"/>                 
                   <Box ml="auto" w="6em">
                     <Button
                       bg="#87C0CD"
@@ -272,7 +311,8 @@ const handleReport = (item={}) => {
                       my="1.5em"
                       w="100%"
                       textAlign="center"
-                      onClick={() => handleReport(currModal)}
+                      type="submit"
+                      onClick={() => {inputRef.current.value!=="" ?  handleReport(currModal) : alert("Enter problem")}}
                     >
                       Update
                     </Button>

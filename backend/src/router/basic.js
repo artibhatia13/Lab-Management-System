@@ -89,6 +89,32 @@ router.get('/lab_list', async (req, res) => {
 
 })
 
+//delete a lab
+
+router.post('/delete_lab/:id', async (req, res) => {
+    console.log(req.params.id);
+    try {
+        let book = await Lab.findOneAndDelete({ l_code: req.params.id })
+        if (book) {
+            let success = {
+                status: true,
+                msg: "Lab deleted successfully"
+            }
+            res.status(200).send(success)
+        }
+        else {
+            let success = {
+                status: false,
+                msg: "Lab could not be deleted"
+            }
+            res.status(200).send(success)
+        }
+
+    }
+    catch (error) {
+        res.status(400).json({ err: "Lab could not be deleted" })
+    }
+})
 
 // lab details
 router.get('/lab/:id', async(req,res) =>{
@@ -151,13 +177,47 @@ router.post('/add_sys/:id', async(req,res) =>{
 // update systems to a specific lab
 
 router.post('/update_sys/:id', async(req,res) =>{
-    const lsystem= req.body
-    console.log(lsystem);
+    // const lsystem= req.body
+    // console.log(lsystem);
     try{
         const sysnew= await Lab.updateOne(
             { l_code: req.params.id, "l_systems.s_id": req.body.s_id },
             { $set: { "l_systems.$.s_status" : req.body.s_status, "l_systems.$.s_problem" : req.body.s_problem } }
          )
+        if (sysnew) {
+            let success = {
+                status: true,
+                msg: "Lab System Added successfully",
+                sysnew:sysnew
+            }
+            res.status(200).send(success)
+        }
+        else {
+            let success = {
+                status: false,
+                msg: "Lab System could not be added successfully",
+            }
+            res.status(200).send(success)
+        }
+
+    }
+    catch (error) {
+        res.status(400).json({ err: "Lab system could not be added due to error" })
+    }
+})
+
+
+// delete systems to a specific lab
+
+router.post('/delete_sys/:id', async(req,res) =>{
+    const lsystem= req.body
+    console.log(lsystem);
+    try{
+        const sysnew= await Lab.updateOne({'l_code': req.params.id},
+            { $pull: { 'l_systems' : { 's_id': req.body.s_id } } ,
+             $set : {'l_sysno': req.body.l_sysno}},
+            
+            );
         if (sysnew) {
             let success = {
                 status: true,

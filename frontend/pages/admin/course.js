@@ -105,22 +105,24 @@ export default function Course() {
     <Box bg="#fafafa">
       <AdminNav />
       <Box mx="5em" my="3em">
+        
+        <Button
+          mt="1em"
+          px="1em"
+          h="2em"
+          bg="#87C0CD"
+          color="white"
+          borderRadius="4em"
+          leftIcon={<AddIcon />}
+          onClick={onOpen}
+        >
+          Add Course
+        </Button>
         <Heading text="Courses" />
         {courses.map((item) => (
           <Box>{displayCard(item)}</Box>
         ))}
-        <Button
-          mt="3em"
-          px="2em"
-          h="3em"
-          bg="#87C0CD"
-          color="white"
-          borderRadius="5em"
-          leftIcon={<AddIcon />}
-          onClick={onOpen}
-        >
-          Add Lab
-        </Button>
+        
       </Box>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
