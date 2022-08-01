@@ -54,7 +54,7 @@ export default function EquipmentDetails(props) {
     setSysList(props.lab.l_systems)
     console.log(props.lab)
     console.log(props)
-    console.log(sysList)
+    // console.log(sysList)
   },[])
 
   useEffect(()=>{
@@ -209,7 +209,7 @@ const handleSubmit = () => {
           </ModalBody>
         </ModalContent>
       </Modal>
-      <Flex>{displayrow(equipments)}</Flex>
+      <Flex>{displayrow(sysList)}</Flex>
       {/* // <Flex mb="4em">{displayrow(equipments.slice(2))}</Flex> */}
     </Box>
   );
