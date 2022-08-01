@@ -16,7 +16,7 @@ import {
 } from "@chakra-ui/react";
 import { AdminNav, Heading } from "../../src/components";
 import { AddIcon } from "@chakra-ui/icons";
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import Link from "next/link";
 
 export default function Lab() {

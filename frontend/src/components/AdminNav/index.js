@@ -13,16 +13,16 @@ export default function AdminNav() {
             courses
           </Text>
         </Link>
-        <Link href="/admin/lab">
+        <Link href="/admin">
           <Text cursor="pointer" mx="1em">
             labs
           </Text>
         </Link>
-        <Link href="/">
+        {/* <Link href="/">
           <Text cursor="pointer" mx="1em">
             profile
           </Text>
-        </Link>
+        </Link> */}
         <Link href="/logout">
           <Text cursor="pointer" mx="1em">
             logout

@@ -123,9 +123,41 @@ router.get('/lab/:id', async(req,res) =>{
 
 router.post('/add_sys/:id', async(req,res) =>{
     const lsystem= req.body
-    console.log(lsystem);
+    // console.log(lsystem);
     try{
         const sysnew= await Lab.findOneAndUpdate({l_code:req.params.id},{...lsystem})
+        if (sysnew) {
+            let success = {
+                status: true,
+                msg: "Lab System Added successfully",
+                sysnew:sysnew
+            }
+            res.status(200).send(success)
+        }
+        else {
+            let success = {
+                status: false,
+                msg: "Lab System could not be added successfully",
+            }
+            res.status(200).send(success)
+        }
+
+    }
+    catch (error) {
+        res.status(400).json({ err: "Lab system could not be added due to error" })
+    }
+})
+
+// update systems to a specific lab
+
+router.post('/update_sys/:id', async(req,res) =>{
+    const lsystem= req.body
+    console.log(lsystem);
+    try{
+        const sysnew= await Lab.updateOne(
+            { l_code: req.params.id, "l_systems.s_id": req.body.s_id },
+            { $set: { "l_systems.$.s_status" : req.body.s_status, "l_systems.$.s_problem" : req.body.s_problem } }
+         )
         if (sysnew) {
             let success = {
                 status: true,
