@@ -21,9 +21,19 @@ import { BsPersonFill } from "react-icons/bs";
 import { AdminNav, Card, Heading } from "../../src/components";
 import { AddIcon } from "@chakra-ui/icons";
 import Link from "next/link";
+import { useState , useEffect} from "react";
+import axios from "axios";
+import backend from "../../const";
+import imag from '../../public/networklab.jpg'
 
 export default function Course() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const [ cName, setCName] = useState('')
+  const [ cCode , setCCode] = useState('')
+  const [ cFac1 , setFac1] = useState('')
+  const [ cFac2 , setFac2] = useState('')
+  const [ cSem , setCSem] = useState('')
+  const [ couList, setCouList] = useState([])
   const courses = [
     {
       id: 1,
@@ -54,6 +64,74 @@ export default function Course() {
     },
   ];
 
+  useEffect(() => {
+    async function fetchData(){
+    const response = await axios.get(`${backend}/course_list`)
+    const res = response.data;
+    if (res.status) {
+        
+        const resArray = res.cour
+        console.log(resArray)
+        setCouList(resArray);
+        if(res.msg)
+            alert(res.msg)
+    }
+    else {
+        alert('Sorry could not retrieve Course list')
+    }
+    }
+    fetchData();
+
+    }, [])
+
+    const handleSubmit = () =>{
+    const reqData ={
+      "c_name": cName,
+      "c_code": cCode,
+      "c_faculty1": cFac1,
+      "c_faculty2": cFac2,
+      "c_sem": cSem
+    }
+    console.log(reqData)
+
+    var config = {
+      method: 'post',
+      url: `${backend}/create_course`,
+      headers: {
+          'Content-Type': 'application/json'
+      },
+      data: reqData
+  };
+
+  axios(config)
+  .then(function(response){
+    if(response.data.status===true){
+      alert('New Course added successfully')
+      setlabList(couList =>[...couList, response.data.cour])
+      console.log(response.data.cour)
+      setCCode('')
+      setCName('')
+      setCSem('')
+      setFac1('')
+      setFac2('')
+    }
+    else{
+      alert('Error in details')
+    }
+    onClose()
+  })
+  .catch(function (error) {
+    console.log(error)
+    alert("Error in adding Course")
+    setCCode('')
+    setCName('')
+    setCSem('')
+    setFac1('')
+    setFac2('')
+    onClose()
+ });
+  }
+
   const displayCard = (item) => {
     return (
       <Flex
@@ -61,9 +139,9 @@ export default function Course() {
         borderBottom="1px"
         borderColor="#e0e0e0"
         w="100%"
-        key={item.id}
+        key={item.c_code}
       >
-        <Image src={item.img} h="10em" borderRadius="6px" />
+        <Image src={imag.src} h="10em" borderRadius="6px" />
         <Box ml="1em">
           <Link href="/admin/course/networklab">
             <Text
@@ -72,29 +150,33 @@ export default function Course() {
               fontWeight="600"
               cursor="pointer"
             >
-              {item.name}
+              {item.c_name}
             </Text>
           </Link>
 
           <Flex fontSize="15px" my="0.5em">
-            {item.faculty.map((name) => (
+            
               <Flex mr="5em">
                 <Icon as={BsPersonFill} color="#49B5CD" my="auto" mr="4px" />
-                <Text>{name}</Text>
+                <Text>{item.c_faculty1}</Text>
               </Flex>
-            ))}
+              <Flex mr="5em">
+                <Icon as={BsPersonFill} color="#49B5CD" my="auto" mr="4px" />
+                <Text>{item.c_faculty2}</Text>
+              </Flex>
+            
           </Flex>
-          <Link href="/admin/lab/1">
+          <Link href="/admin/lab/dd">
             <Button fontSize="14px" fontWeight="400" mt="0.5em">
-              {item.lab}
+              {item.c_lab}
             </Button>
           </Link>
           <Flex mt="0.5em" fontSize="14px">
-            <Text>Semester {item.sem}</Text>
+            <Text>Semester {item.c_sem}</Text>
             <Text mx="0.4em" my="-1px">
               |
             </Text>
-            <Text>{item.st_enrolled} students enrolled</Text>
+            
           </Flex>
         </Box>
       </Flex>
@@ -119,7 +201,7 @@ export default function Course() {
           Add Course
         </Button>
         <Heading text="Courses" />
-        {courses.map((item) => (
+        {couList.map((item) => (
           <Box>{displayCard(item)}</Box>
         ))}
         
@@ -130,11 +212,11 @@ export default function Course() {
           <ModalHeader textAlign="center">Add Lab</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Input placeholder="Name" />
-            <Input placeholder="Manager Name" mt="1em" />
-            <Input placeholder="Location" mt="1em" />
-            <Input placeholder="Description" mt="1em" />
-            <Input placeholder="No of Sytems" mt="1em" />
+            <Input placeholder="Course Name" value={cName} onChange={e => setCName(e.target.value)}/>
+            <Input placeholder="Course Code" mt="1em" value={cCode} onChange={e => setCCode(e.target.value)}/>
+            <Input placeholder="Course Faculty 1 " mt="1em" value={cFac1} onChange={e => setFac1(e.target.value)}/>
+            <Input placeholder="Course Faculty 2" mt="1em" value={cFac2} onChange={e => setFac2(e.target.value)}/>
+            <Input placeholder="Course Sem" mt="1em" value={cSem}onChange={e => setCSem(e.target.value)} />
             <Box ml="auto" w="6em">
               <Button
                 bg="#87C0CD"
@@ -142,7 +224,7 @@ export default function Course() {
                 my="1.5em"
                 w="100%"
                 textAlign="center"
-                onClick={onClose}
+                onClick={()=> handleSubmit()}
               >
                 Add
               </Button>

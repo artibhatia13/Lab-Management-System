@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const Student = require('../modal/Student')
+const Course = require('../modal/Course')
 const Lab = require('../modal/Lab')
 const { rawListeners } = require('../modal/Student')
 
@@ -12,6 +13,8 @@ router.post('/', (req, res) => {
     res.status(200).send(success)
 })
 
+
+//admin login
 router.post('/admin_login', async (req, res) => {
     try {
         let success
@@ -238,6 +241,56 @@ router.post('/delete_sys/:id', async(req,res) =>{
     catch (error) {
         res.status(400).json({ err: "Lab system could not be added due to error" })
     }
+})
+
+//add a course
+router.post('/create_course', async (req, res) => {
+    const l = req.body
+    console.log(l);
+    try {
+        const cou = new Course(req.body)
+        await cou.save()
+        let success = {
+            status: true,
+            cour: cou
+        }
+        res.status(201).send(success)
+    } catch (error) {
+        const failure = {
+            status: false,
+            error: error
+        }
+        res.status(400).send(failure)
+    }
+})
+
+//get all course list
+router.get('/course_list', async (req, res) => {
+    try {
+        const cour = await Course.find().select([])
+
+        if (cour.length !== 0) {
+            let success = {
+                status: true,
+                cour: cour,
+            }
+            res.status(200).json(success)
+        }
+        else {
+            let success = {
+                status: true,
+                cour: cour,
+                msg: "No Course present"
+            }
+            res.status(200).json(success)
+        }
+
+    }
+
+    catch (err) {
+        res.status(404).json({ status: false, err: "No User Or Server Error" })
+    }
+
 })
 
 module.exports = router

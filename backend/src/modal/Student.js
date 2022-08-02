@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 
-const studentSchema = mongoose.Schema({
+const studentschema = mongoose.Schema({
     s_name: {
         type: String,
         required: true,
@@ -24,9 +24,9 @@ const studentSchema = mongoose.Schema({
     },
 
     lab:[{
-        l_id:{
+        c_id:{
             type: mongoose.Schema.Types.ObjectId,
-            ref: 'Lab'
+            ref: 'Course'
         },
         grade:{
             type: Number,
@@ -40,6 +40,6 @@ const studentSchema = mongoose.Schema({
 
 })
 
-const Student = mongoose.model('Student', studentSchema)
+const Student = mongoose.model('Student', studentschema)
 
 module.exports = Student
