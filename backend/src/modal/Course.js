@@ -1,45 +1,66 @@
 const mongoose = require('mongoose')
 
-const studentSchema = mongoose.Schema({
-    s_name: {
+const courseSchema = mongoose.Schema({
+    c_name: {
         type: String,
         required: true,
         trim: true
     },
-    admissionNo: {
+    c_code: {
         type: String,
-        required: false,
+        required: true,
         unique: true,
     },
-    class: {
+    c_faculty1: {
         type: String
     },
 
-    year: {
+    c_faculty2: {
         type: String
     },
 
-    division: {
+    c_sem: {
         type: String
     },
+    c_lab:{
+        type:String
+    },
+    c_description:{
+        type:String
+    },
+    c_prerequistes:{
+        type:String
+    },
+    c_students:{
+        type:Number
+    },
 
-    lab:[{
+    c_objectives:[{
         l_id:{
-            type: mongoose.Schema.Types.ObjectId,
-            ref: 'Lab'
+            type: String
         },
-        grade:{
-            type: Number,
-        },
-        attendance:{
+    }],
+
+    c_assignment:
+    [{
+        a_id:{
             type: Number
+        },
+        a_status:{
+            type:Boolean
+        },
+        a_description:{
+            type:String
+        },
+        a_date:{
+            type:String
         }
-    }]
+    }],
 
     
 
 })
 
-const Student = mongoose.model('Student', studentSchema)
+const Course = mongoose.model('Course', courseSchema)
 
-module.exports = Student
+module.exports = Course

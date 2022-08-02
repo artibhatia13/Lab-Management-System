@@ -20,6 +20,7 @@ import Link from "next/link";
 import { useState, useEffect } from "react";
 import axios from 'axios';
 import backend from "../const";
+import imag from'../public/fault.png'
 
 export default function Admin() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -120,12 +121,12 @@ const handleSubmit = () => {
                   cursor="pointer"
                   borderRadius="6px"
                 >
-                  {/* <Image
-                    src={item.img}
-                    h="15em"
+                  <Image
+                    src={imag.src}
+                    h="10em"
                     objectFit="cover"
                     borderRadius="6px 6px 0 0"
-                  /> */}
+                  />
                   <Text p="1em">{item.l_name}</Text>
                 </Box>
               </Link>

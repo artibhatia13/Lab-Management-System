@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 
 const Student = require('../modal/Student')
+const Course = require('../modal/Course')
 const Lab = require('../modal/Lab')
 const { rawListeners } = require('../modal/Student')
 
@@ -12,6 +13,8 @@ router.post('/', (req, res) => {
     res.status(200).send(success)
 })
 
+
+//admin login
 router.post('/admin_login', async (req, res) => {
     try {
         let success
@@ -89,6 +92,32 @@ router.get('/lab_list', async (req, res) => {
 
 })
 
+//delete a lab
+
+router.post('/delete_lab/:id', async (req, res) => {
+    console.log(req.params.id);
+    try {
+        let book = await Lab.findOneAndDelete({ l_code: req.params.id })
+        if (book) {
+            let success = {
+                status: true,
+                msg: "Lab deleted successfully"
+            }
+            res.status(200).send(success)
+        }
+        else {
+            let success = {
+                status: false,
+                msg: "Lab could not be deleted"
+            }
+            res.status(200).send(success)
+        }
+
+    }
+    catch (error) {
+        res.status(400).json({ err: "Lab could not be deleted" })
+    }
+})
 
 // lab details
 router.get('/lab/:id', async(req,res) =>{
@@ -151,8 +180,8 @@ router.post('/add_sys/:id', async(req,res) =>{
 // update systems to a specific lab
 
 router.post('/update_sys/:id', async(req,res) =>{
-    const lsystem= req.body
-    console.log(lsystem);
+    // const lsystem= req.body
+    // console.log(lsystem);
     try{
         const sysnew= await Lab.updateOne(
             { l_code: req.params.id, "l_systems.s_id": req.body.s_id },
@@ -178,6 +207,90 @@ router.post('/update_sys/:id', async(req,res) =>{
     catch (error) {
         res.status(400).json({ err: "Lab system could not be added due to error" })
     }
+})
+
+
+// delete systems to a specific lab
+
+router.post('/delete_sys/:id', async(req,res) =>{
+    const lsystem= req.body
+    console.log(lsystem);
+    try{
+        const sysnew= await Lab.updateOne({'l_code': req.params.id},
+            { $pull: { 'l_systems' : { 's_id': req.body.s_id } } ,
+             $set : {'l_sysno': req.body.l_sysno}},
+            
+            );
+        if (sysnew) {
+            let success = {
+                status: true,
+                msg: "Lab System Added successfully",
+                sysnew:sysnew
+            }
+            res.status(200).send(success)
+        }
+        else {
+            let success = {
+                status: false,
+                msg: "Lab System could not be added successfully",
+            }
+            res.status(200).send(success)
+        }
+
+    }
+    catch (error) {
+        res.status(400).json({ err: "Lab system could not be added due to error" })
+    }
+})
+
+//add a course
+router.post('/create_course', async (req, res) => {
+    const l = req.body
+    console.log(l);
+    try {
+        const cou = new Course(req.body)
+        await cou.save()
+        let success = {
+            status: true,
+            cour: cou
+        }
+        res.status(201).send(success)
+    } catch (error) {
+        const failure = {
+            status: false,
+            error: error
+        }
+        res.status(400).send(failure)
+    }
+})
+
+//get all course list
+router.get('/course_list', async (req, res) => {
+    try {
+        const cour = await Course.find().select([])
+
+        if (cour.length !== 0) {
+            let success = {
+                status: true,
+                cour: cour,
+            }
+            res.status(200).json(success)
+        }
+        else {
+            let success = {
+                status: true,
+                cour: cour,
+                msg: "No Course present"
+            }
+            res.status(200).json(success)
+        }
+
+    }
+
+    catch (err) {
+        res.status(404).json({ status: false, err: "No User Or Server Error" })
+    }
+
 })
 
 module.exports = router

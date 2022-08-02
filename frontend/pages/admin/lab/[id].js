@@ -1,4 +1,4 @@
-import { Box, Text, Flex, Image } from "@chakra-ui/react";
+import { Box, Text, Flex, Image , Button} from "@chakra-ui/react";
 import axios from 'axios';
 import backend from "../../../const";
 import {
@@ -73,6 +73,39 @@ export default function Lab() {
 
 }, [router.isReady]);
 
+const handleDelete =()=> {
+  
+  const { id } = router.query
+  console.log(id)
+  setId(id)
+  var config = {
+      method: 'post',
+      url: `${backend}/delete_lab/${id}`,
+      headers: {
+          'Content-Type': 'application/json'
+      },
+  };
+
+  axios(config)
+  .then(function (response) {
+      if (response.data.status === true) {
+        console.log(response.data)
+        setTimeout(() => {
+          window.location.href = "/admin"
+        }, 500)
+        alert(`${response.data.msg}`)
+      }
+      else {
+          alert("Error in details")
+      }
+      
+  })
+  .catch(function (error) {
+      alert("Error in Deleted System")
+  });
+  
+}
+
 
   if(!lab)
   return null
@@ -82,6 +115,17 @@ export default function Lab() {
       <AdminNav />
       <Box mx="5em" my="3em">
         <Heading text={`Computer Lab ${lab.l_code} details`} />
+        <Button
+          mt="1em"
+          px="1em"
+          h="2em"
+          bg="#ff0000"
+          color="white"
+          borderRadius="4em"
+          onClick={handleDelete}
+        >
+          Delete Lab
+        </Button>
         <LabDetails lab={lab}/>
         {/* <Heading text="Time Table" />
         <Timetable tt={lab.availableDays}/> */}
