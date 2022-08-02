@@ -84,7 +84,7 @@ export default function Course() {
 
     }, [])
 
-    const handleSubmit = () =>{
+const handleSubmit = () =>{
     const reqData ={
       "c_name": cName,
       "c_code": cCode,
@@ -107,7 +107,7 @@ export default function Course() {
   .then(function(response){
     if(response.data.status===true){
       alert('New Course added successfully')
-      setlabList(couList =>[...couList, response.data.cour])
+      setCouList(couList =>[...couList, response.data.cour])
       console.log(response.data.cour)
       setCCode('')
       setCName('')
@@ -143,7 +143,7 @@ export default function Course() {
       >
         <Image src={imag.src} h="10em" borderRadius="6px" />
         <Box ml="1em">
-          <Link href="/admin/course/networklab">
+          <Link href={"/admin/course/" + item.c_code}>
             <Text
               fontSize="18px"
               letterSpacing="0.8px"
