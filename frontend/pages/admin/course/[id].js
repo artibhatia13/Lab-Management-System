@@ -1,4 +1,4 @@
-import { Box , Button} from "@chakra-ui/react";
+import { Box, Button } from "@chakra-ui/react";
 
 import {
   AdminNav,
@@ -10,34 +10,34 @@ import {
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import axios from "axios";
 import backend from "../../../const";
-import { useEffect,useState } from "react";
-
-import { useRouter } from 'next/router'
+import { useEffect, useState } from "react";
+import { DeleteIcon } from "@chakra-ui/icons";
+import { useRouter } from "next/router";
 
 export default function Lab() {
-  const router = useRouter()
-  const [id,setId]=useState('')
+  const router = useRouter();
+  const [id, setId] = useState("");
   const tabsStyles = {
     color: "#58B5CA",
     borderBottom: "2px",
     borderColor: "#58B5CA",
   };
 
-  useEffect(()=>{
-    if(!router.isReady) return;
-    const { id } = router.query
-    console.log(id)
-    setId(id)
+  useEffect(() => {
+    if (!router.isReady) return;
+    const { id } = router.query;
+    console.log(id);
+    setId(id);
     // async function fetchData(){
     // const response = await axios.get(`${backend}/lab/${id}`)
     // const res = response.data;
     // if (res.status) {
-        
+
     //     const resData= res.data
     //     // console.log(resData)
     //     setLab(resData)
     //     // setLoad(true)
-        
+
     //     if(res.msg)
     //         alert(res.msg)
     // }
@@ -46,44 +46,36 @@ export default function Lab() {
     // }
     // }
     // fetchData();
+  }, [router.isReady]);
 
-    
-
-}, [router.isReady]);
-
-  const handleDelete =()=> {
-  
-    const { id } = router.query
-    console.log(id)
-    setId(id)
+  const handleDelete = () => {
+    const { id } = router.query;
+    console.log(id);
+    setId(id);
     var config = {
-        method: 'post',
-        url: `${backend}/delete_course/${id}`,
-        headers: {
-            'Content-Type': 'application/json'
-        },
+      method: "post",
+      url: `${backend}/delete_course/${id}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
     };
-  
+
     axios(config)
-    .then(function (response) {
+      .then(function (response) {
         if (response.data.status === true) {
-          console.log(response.data)
+          console.log(response.data);
           setTimeout(() => {
-            window.location.href = "/admin/course"
-          }, 500)
-          alert(`${response.data.msg}`)
+            window.location.href = "/admin/course";
+          }, 500);
+          alert(`${response.data.msg}`);
+        } else {
+          alert("Error in details");
         }
-        else {
-            alert("Error in details")
-        }
-        
-    })
-    .catch(function (error) {
-        alert("Error in Deleting Course")
-    });
-    
-  }
-  
+      })
+      .catch(function (error) {
+        alert("Error in Deleting Course");
+      });
+  };
 
   return (
     <Box bg="#fafafa">
@@ -99,17 +91,20 @@ export default function Lab() {
           <Box mb="2em"></Box>
           <TabPanels>
             <TabPanel>
-            <Button
-          mt="1em"
-          px="1em"
-          h="2em"
-          bg="#ff0000"
-          color="white"
-          borderRadius="4em"
-          onClick={handleDelete}
-        >
-          Delete Lab
-        </Button>
+              <Button
+                position="absolute"
+                my="-6em"
+                right="6em"
+                px="1em"
+                h="2em"
+                bg="#ef5350"
+                color="white"
+                borderRadius="4em"
+                rightIcon={<DeleteIcon />}
+                onClick={handleDelete}
+              >
+                Delete Lab
+              </Button>
               <CourseDetails />
             </TabPanel>
             <TabPanel>
