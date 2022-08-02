@@ -293,4 +293,31 @@ router.get('/course_list', async (req, res) => {
 
 })
 
+//delete a lab
+
+router.post('/delete_course/:id', async (req, res) => {
+    console.log(req.params.id);
+    try {
+        let cour = await Course.findOneAndDelete({ c_code: req.params.id })
+        if (cour) {
+            let success = {
+                status: true,
+                msg: "Course deleted successfully"
+            }
+            res.status(200).send(success)
+        }
+        else {
+            let success = {
+                status: false,
+                msg: "Course could not be deleted"
+            }
+            res.status(200).send(success)
+        }
+
+    }
+    catch (error) {
+        res.status(400).json({ err: "Course could not be deleted" })
+    }
+})
+
 module.exports = router
