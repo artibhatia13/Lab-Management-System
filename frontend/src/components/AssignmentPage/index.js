@@ -6,12 +6,31 @@ import {
   Link,
   Icon,
   Button,
+  Input,
   Grid,
   GridItem,
 } from "@chakra-ui/react";
+import {
+  Modal,
+  useDisclosure,
+  ModalOverlay,
+  ModalContent,
+  ModalHeader,
+  ModalFooter,
+  ModalBody,
+  ModalCloseButton,
+} from "@chakra-ui/react";
 import { TimeIcon } from "@chakra-ui/icons";
+import { useState,useEffect } from "react";
 
-export default function AssignmentPage() {
+
+export default function AssignmentPage({course,id}) {
+  const {isOpen, onOpen, onClose} = useDisclosure();
+  const [aid ,setAid] = useState('')
+  const [des, setDes] = useState('')
+  const [adate, setAdate] = useState('')
+  const [aList, setAlist] = useState('')
+  const [list,setlist] = useState(null)
   const assignments = [
     {
       id: 1,
@@ -28,6 +47,57 @@ export default function AssignmentPage() {
       deadline: "Monday, 23 July, 12:00 PM",
     },
   ];
+
+useEffect(()=>{
+  setAlist(course.c_assignments)
+},[aList]);
+
+  const handleSubmit = () => {
+    const newAssi = {
+      a_id: aid,
+      a_status: false,
+      a_description: des,
+      a_date:adate
+    };
+    console.log(course)
+    console.log(id)
+    console.log(newAssi)
+    const reqData = course;
+    const reqId = id;
+    setlist(aList)
+    // setlist(...list,newAssi)
+    reqData.c_assignments = [...reqData.c_assignments,newAssi]
+
+    console.log(reqData)
+
+    var config = {
+      method: "post",
+      url: `${backend}/add_assign/${reqId}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: reqData,
+    };
+
+    axios(config)
+      .then(function (response) {
+        if (response.data.status === true) {
+          // console.log(response.data)
+          alert("Lab System added successfully");
+          setAlist([...aList, newAssi]);
+          setAid("");
+          setDes("");
+          setAdate("");
+        } else {
+          alert("Error in details");
+        }
+        onClose();
+      })
+      .catch(function (error) {
+        alert("Error in adding System");
+        onClose();
+      });
+  };
 
   const asgmCard = (item) => {
     return (
@@ -58,5 +128,42 @@ export default function AssignmentPage() {
     );
   };
 
-  return <Box>{assignments.map((item) => asgmCard(item))}</Box>;
+  return <Box>
+    <Button
+        ml="auto"
+        bg="#fff000"
+        color="white"
+        borderRadius="10em"
+        py="1em"
+        px="2em"
+        onClick={onOpen}
+      >
+      Add Assignment
+    </Button>
+    <Modal isOpen={isOpen} onClose={onClose}>
+        <ModalOverlay />
+        <ModalContent mt="7em">
+          <ModalHeader textAlign="center">Edit Course Details</ModalHeader>
+          <ModalCloseButton />
+          <ModalBody>
+            <Input placeholder="Assignment Id"  value={aid} onChange={e => setAid(e.target.value)}/>
+            <Input placeholder="Assignment Description"  value={des} onChange={e => setDes(e.target.value)}/>
+            <Input placeholder="Assignment Deadline"  value={adate} onChange={e => setAdate(e.target.value)}/>
+            <Box ml="auto" w="6em">
+              <Button
+                bg="#87C0CD"
+                color="white"
+                my="1.5em"
+                w="100%"
+                textAlign="center"
+                onClick={onClose}
+              >
+                Add
+              </Button>
+            </Box>
+          </ModalBody>
+        </ModalContent>
+      </Modal>
+    {assignments.map((item) => asgmCard(item))}
+    </Box>;
 }

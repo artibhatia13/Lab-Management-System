@@ -70,7 +70,7 @@ export default function Course() {
       const res = response.data;
       if (res.status) {
         const resArray = res.cour;
-        console.log(resArray);
+        // console.log(resArray);
         setCouList(resArray);
         if (res.msg) alert(res.msg);
       } else {
@@ -145,7 +145,7 @@ export default function Course() {
               fontWeight="600"
               cursor="pointer"
             >
-              {item.c_name}
+              {item.c_name.toUpperCase()}
             </Text>
           </Link>
 

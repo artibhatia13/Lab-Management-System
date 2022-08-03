@@ -42,40 +42,14 @@ export default function LabBlueprint(props) {
   const [sysList, setSysList] = useState([]);
   const [newSys, setNewSys] = useState("");
   const inputRef = useRef(null);
-  const [equipments, setEquipments] = useState([
-    {
-      s_id: 123424221,
-      s_problem: "CPUhsdthsrth",
-      s_status: 1,
-    },
-    {
-      s_id: 123421,
-      s_problem: "CPU",
-      s_status: 0,
-    },
-    // {
-    //   s_id: 124221,
-    //   s_problem: "CPU",
-    //   s_status: true,
-    // },
-    // {
-    //   s_id: 12424221,
-    //   s_problem: "CPergsdrgsU",
-    //   s_status: false,
-    // },
-    // {
-    //   s_id: 1234291,
-    //   s_problem: "CPU",
-    //   s_status: true,
-    // },
-  ]);
+
   console.log(props);
   useEffect(() => {
     setSysList(props.lab.l_systems);
     // console.log(props.lab)
     // console.log(props)
     // console.log(sysList)
-  }, []);
+  }, [sysList]);
   // useEffect(()=>{
   //   console.log(sysList)
   // },[sysList])
@@ -357,12 +331,12 @@ export default function LabBlueprint(props) {
         leftIcon={<AddIcon />}
         onClick={onOpen}
       >
-        Add Lab
+        Add System
       </Button>
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent mt="7em">
-          <ModalHeader textAlign="center">Add Lab</ModalHeader>
+          <ModalHeader textAlign="center">Add New System</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Input

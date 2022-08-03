@@ -13,31 +13,7 @@ import { DeleteIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
 import { useEffect, useState } from "react";
 
-// export async function getStaticProps(){
-//   if(!router.isReady) return;
-//     const { id } = router.query
-//     // console.log(id)
-//     const response = await axios.get(`${backend}/lab/${id}`)
-//     const res = response.data;
-//     if (res.status) {
 
-//         const resData= res.data
-//         console.log(resData)
-//         // setLoad(true)
-
-//         if(res.msg)
-//             alert(res.msg)
-//     }
-//     else {
-//         alert('Sorry could not retrieve Lab list')
-//     }
-//     return {
-//       props: {
-//         resData,
-//       },
-//     }
-
-// }
 
 export default function Lab() {
   const router = useRouter();

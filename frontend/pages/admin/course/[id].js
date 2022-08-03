@@ -15,38 +15,40 @@ import { DeleteIcon } from "@chakra-ui/icons";
 import { useRouter } from "next/router";
 
 export default function Lab() {
-  const router = useRouter();
-  const [id, setId] = useState("");
+  const router = useRouter()
+  const[ course,setCourse] = useState(null)
+  const [id,setId]=useState('')
   const tabsStyles = {
     color: "#58B5CA",
     borderBottom: "2px",
     borderColor: "#58B5CA",
   };
 
-  useEffect(() => {
-    if (!router.isReady) return;
-    const { id } = router.query;
-    console.log(id);
-    setId(id);
-    // async function fetchData(){
-    // const response = await axios.get(`${backend}/lab/${id}`)
-    // const res = response.data;
-    // if (res.status) {
+  useEffect(()=>{
+    if(!router.isReady) return;
+    const { id } = router.query
+    console.log(id)
+    setId(id)
 
-    //     const resData= res.data
-    //     // console.log(resData)
-    //     setLab(resData)
-    //     // setLoad(true)
-
-    //     if(res.msg)
-    //         alert(res.msg)
-    // }
-    // else {
-    //     alert('Sorry could not retrieve Lab list')
-    // }
-    // }
-    // fetchData();
-  }, [router.isReady]);
+    async function fetchData(){
+    const response = await axios.get(`${backend}/course/${id}`)
+    const res = response.data;
+    if (res.status) {
+        
+        const resData= res.data
+        console.log(resData)
+        setCourse(resData)
+        // setLoad(true)
+        
+        if(res.msg)
+            alert(res.msg)
+    }
+    else {
+        alert('Sorry could not retrieve Lab list')
+      }
+    }
+    fetchData();
+  },[router.isReady]);
 
   const handleDelete = () => {
     const { id } = router.query;
@@ -77,6 +79,9 @@ export default function Lab() {
       });
   };
 
+  if (!course)
+  return null
+  else
   return (
     <Box bg="#fafafa">
       <AdminNav />
@@ -105,13 +110,13 @@ export default function Lab() {
               >
                 Delete Lab
               </Button>
-              <CourseDetails />
+              <CourseDetails course={course} id={id}/>
             </TabPanel>
             <TabPanel>
               <Timetable twidth="90%" />
             </TabPanel>
             <TabPanel>
-              <AssignmentPage />
+              <AssignmentPage course={course} id={id}/>
             </TabPanel>
             <TabPanel>
               <Attendance />
