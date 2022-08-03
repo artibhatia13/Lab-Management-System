@@ -16,6 +16,7 @@ import { useRouter } from 'next/router'
 
 export default function Lab() {
   const router = useRouter()
+  const[ course,setCourse] = useState(null)
   const [id,setId]=useState('')
   const tabsStyles = {
     color: "#58B5CA",
@@ -28,24 +29,24 @@ export default function Lab() {
     const { id } = router.query
     console.log(id)
     setId(id)
-    // async function fetchData(){
-    // const response = await axios.get(`${backend}/lab/${id}`)
-    // const res = response.data;
-    // if (res.status) {
+    async function fetchData(){
+    const response = await axios.get(`${backend}/course/${id}`)
+    const res = response.data;
+    if (res.status) {
         
-    //     const resData= res.data
-    //     // console.log(resData)
-    //     setLab(resData)
-    //     // setLoad(true)
+        const resData= res.data
+        console.log(resData)
+        setCourse(resData)
+        // setLoad(true)
         
-    //     if(res.msg)
-    //         alert(res.msg)
-    // }
-    // else {
-    //     alert('Sorry could not retrieve Lab list')
-    // }
-    // }
-    // fetchData();
+        if(res.msg)
+            alert(res.msg)
+    }
+    else {
+        alert('Sorry could not retrieve Lab list')
+    }
+    }
+    fetchData();
 
     
 
@@ -84,7 +85,9 @@ export default function Lab() {
     
   }
   
-
+  if(!course)
+  return null
+  else
   return (
     <Box bg="#fafafa">
       <AdminNav />
@@ -110,7 +113,7 @@ export default function Lab() {
         >
           Delete Lab
         </Button>
-              <CourseDetails />
+              <CourseDetails course={course} id={id} />
             </TabPanel>
             <TabPanel>
               <Timetable twidth="90%" />

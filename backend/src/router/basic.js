@@ -293,7 +293,7 @@ router.get('/course_list', async (req, res) => {
 
 })
 
-//delete a lab
+//delete a course
 
 router.post('/delete_course/:id', async (req, res) => {
     console.log(req.params.id);
@@ -317,6 +317,64 @@ router.post('/delete_course/:id', async (req, res) => {
     }
     catch (error) {
         res.status(400).json({ err: "Course could not be deleted" })
+    }
+})
+
+// course details
+router.get('/course/:id', async(req,res) =>{
+    try{
+        // console.log(req.params);
+        const cour= await Course.find( {c_code : req.params.id}).select([])
+        // console.log(lab);
+        if(cour.length != 0){
+            let success= {
+                status:true,
+                data:cour[0],
+            }
+            res.status(200).json(success)
+        }
+        else{
+            let success={
+                status:false,
+                message:"Could not find the Course",
+                data:{}
+            }
+            res.status(200).json(success)
+
+        }
+    }
+    catch(err){
+        res.status(404).json({ status:false, err:"Server Error"})
+
+    }
+})
+
+// update course
+
+router.post('/update_course/:id', async(req,res) =>{
+    const ccourse= req.body
+    console.log(ccourse);
+    try{
+        const cour= await Course.findOneAndUpdate({c_code:req.params.id},{...ccourse})
+        if (sysnew) {
+            let success = {
+                status: true,
+                msg: "Course Updated successfully",
+                data:cour
+            }
+            res.status(200).send(success)
+        }
+        else {
+            let success = {
+                status: false,
+                msg: "Course could not be updated successfully",
+            }
+            res.status(200).send(success)
+        }
+
+    }
+    catch (error) {
+        res.status(400).json({ err: "COurse could not be updated due to error" })
     }
 })
 

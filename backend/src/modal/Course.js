@@ -36,7 +36,7 @@ const courseSchema = mongoose.Schema({
     },
 
     c_objectives:[{
-        l_id:{
+        ob:{
             type: String
         },
     }],

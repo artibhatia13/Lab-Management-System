@@ -90,7 +90,8 @@ const handleSubmit = () =>{
       "c_code": cCode,
       "c_faculty1": cFac1,
       "c_faculty2": cFac2,
-      "c_sem": cSem
+      "c_sem": cSem,
+      "c_students":0
     }
     console.log(reqData)
 
@@ -150,7 +151,7 @@ const handleSubmit = () =>{
               fontWeight="600"
               cursor="pointer"
             >
-              {item.c_name}
+              {item.c_name.toUpperCase()}
             </Text>
           </Link>
 
