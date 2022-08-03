@@ -356,7 +356,7 @@ router.post('/update_course/:id', async(req,res) =>{
     console.log(ccourse);
     try{
         const cour= await Course.findOneAndUpdate({c_code:req.params.id},{...ccourse})
-        if (sysnew) {
+        if (cour) {
             let success = {
                 status: true,
                 msg: "Course Updated successfully",
@@ -375,6 +375,67 @@ router.post('/update_course/:id', async(req,res) =>{
     }
     catch (error) {
         res.status(400).json({ err: "COurse could not be updated due to error" })
+    }
+})
+
+// add assignments to the course 
+
+router.post('/add_assign/:id', async(req,res) =>{
+    const newassign= req.body
+    // console.log(lsystem);
+    try{
+        const nassi= await Course.findOneAndUpdate({c_code:req.params.id},{...newassign})
+        if (nassi) {
+            let success = {
+                status: true,
+                msg: "Assignment Added successfully",
+                data:nassi
+            }
+            res.status(200).send(success)
+        }
+        else {
+            let success = {
+                status: false,
+                msg: "Assignment could not be added successfully",
+            }
+            res.status(200).send(success)
+        }
+
+    }
+    catch (error) {
+        res.status(400).json({ err: "Assignment could not be added due to error" })
+    }
+})
+
+// update assignments of a course
+
+router.post('/update_assi/:id', async(req,res) =>{
+    // const lsystem= req.body
+    // console.log(lsystem);
+    try{
+        const newassi= await Course.updateOne(
+            { c_code: req.params.id, "c_systems.a_id": req.body.a_id },
+            { $set: { "c_systems.$.a_status" : req.body.s_status} }
+         )
+        if (newassi) {
+            let success = {
+                status: true,
+                msg: "Assignment Updated successfully",
+                data:newassi
+            }
+            res.status(200).send(success)
+        }
+        else {
+            let success = {
+                status: false,
+                msg: "Assignment could not be updated successfully",
+            }
+            res.status(200).send(success)
+        }
+
+    }
+    catch (error) {
+        res.status(400).json({ err: "Assignment could not be updated due to error" })
     }
 })
 

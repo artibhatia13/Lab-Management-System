@@ -1,4 +1,4 @@
-import { Box , Button} from "@chakra-ui/react";
+import { Box, Button } from "@chakra-ui/react";
 
 import {
   AdminNav,
@@ -10,9 +10,9 @@ import {
 import { Tabs, TabList, TabPanels, Tab, TabPanel } from "@chakra-ui/react";
 import axios from "axios";
 import backend from "../../../const";
-import { useEffect,useState } from "react";
-
-import { useRouter } from 'next/router'
+import { useEffect, useState } from "react";
+import { DeleteIcon } from "@chakra-ui/icons";
+import { useRouter } from "next/router";
 
 export default function Lab() {
   const router = useRouter()
@@ -29,6 +29,7 @@ export default function Lab() {
     const { id } = router.query
     console.log(id)
     setId(id)
+
     async function fetchData(){
     const response = await axios.get(`${backend}/course/${id}`)
     const res = response.data;
@@ -44,48 +45,41 @@ export default function Lab() {
     }
     else {
         alert('Sorry could not retrieve Lab list')
-    }
+      }
     }
     fetchData();
+  },[router.isReady]);
 
-    
-
-}, [router.isReady]);
-
-  const handleDelete =()=> {
-  
-    const { id } = router.query
-    console.log(id)
-    setId(id)
+  const handleDelete = () => {
+    const { id } = router.query;
+    console.log(id);
+    setId(id);
     var config = {
-        method: 'post',
-        url: `${backend}/delete_course/${id}`,
-        headers: {
-            'Content-Type': 'application/json'
-        },
+      method: "post",
+      url: `${backend}/delete_course/${id}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
     };
-  
+
     axios(config)
-    .then(function (response) {
+      .then(function (response) {
         if (response.data.status === true) {
-          console.log(response.data)
+          console.log(response.data);
           setTimeout(() => {
-            window.location.href = "/admin/course"
-          }, 500)
-          alert(`${response.data.msg}`)
+            window.location.href = "/admin/course";
+          }, 500);
+          alert(`${response.data.msg}`);
+        } else {
+          alert("Error in details");
         }
-        else {
-            alert("Error in details")
-        }
-        
-    })
-    .catch(function (error) {
-        alert("Error in Deleting Course")
-    });
-    
-  }
-  
-  if(!course)
+      })
+      .catch(function (error) {
+        alert("Error in Deleting Course");
+      });
+  };
+
+  if (!course)
   return null
   else
   return (
@@ -102,24 +96,27 @@ export default function Lab() {
           <Box mb="2em"></Box>
           <TabPanels>
             <TabPanel>
-            <Button
-          mt="1em"
-          px="1em"
-          h="2em"
-          bg="#ff0000"
-          color="white"
-          borderRadius="4em"
-          onClick={handleDelete}
-        >
-          Delete Lab
-        </Button>
-              <CourseDetails course={course} id={id} />
+              <Button
+                position="absolute"
+                my="-6em"
+                right="6em"
+                px="1em"
+                h="2em"
+                bg="#ef5350"
+                color="white"
+                borderRadius="4em"
+                rightIcon={<DeleteIcon />}
+                onClick={handleDelete}
+              >
+                Delete Lab
+              </Button>
+              <CourseDetails course={course} id={id}/>
             </TabPanel>
             <TabPanel>
               <Timetable twidth="90%" />
             </TabPanel>
             <TabPanel>
-              <AssignmentPage />
+              <AssignmentPage course={course} id={id}/>
             </TabPanel>
             <TabPanel>
               <Attendance />

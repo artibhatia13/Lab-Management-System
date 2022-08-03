@@ -38,7 +38,7 @@ const courseSchema = mongoose.Schema({
     c_objectives:[{
         ob:{
             type: String
-        },
+       },
     }],
 
     c_assignment:
