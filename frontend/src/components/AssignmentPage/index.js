@@ -218,6 +218,7 @@ useEffect(()=>{
     {/* if !aList
     return null
     else */}
+    {/* dgdfg */}
     {course.c_assignment.map((item) => asgmCard(item))}
     </Box>;
 }
