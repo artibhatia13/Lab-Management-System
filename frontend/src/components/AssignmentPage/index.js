@@ -22,6 +22,9 @@ import {
 } from "@chakra-ui/react";
 import { TimeIcon } from "@chakra-ui/icons";
 import { useState,useEffect } from "react";
+import axios from "axios";
+import backend from "../../../const";
+
 
 
 export default function AssignmentPage({course,id}) {
@@ -49,7 +52,7 @@ export default function AssignmentPage({course,id}) {
   ];
 
 useEffect(()=>{
-  setAlist(course.c_assignments)
+  setAlist(course.c_assignment)
 },[aList]);
 
   const handleSubmit = () => {
@@ -59,14 +62,21 @@ useEffect(()=>{
       a_description: des,
       a_date:adate
     };
-    console.log(course)
-    console.log(id)
-    console.log(newAssi)
+    // console.log(course)
+    // console.log(id)
+    // console.log(newAssi)
     const reqData = course;
     const reqId = id;
-    setlist(aList)
+    // setlist(aList)
     // setlist(...list,newAssi)
-    reqData.c_assignments = [...reqData.c_assignments,newAssi]
+    if(!reqData.c_assignment){
+      reqData.c_assignment= newAssi
+    }
+    else
+    {
+      reqData.c_assignment = [...reqData.c_assignment,newAssi]
+    }
+    // reqData.c_assignments = [...reqData.c_assignments,newAssi]
 
     console.log(reqData)
 
@@ -83,37 +93,77 @@ useEffect(()=>{
       .then(function (response) {
         if (response.data.status === true) {
           // console.log(response.data)
-          alert("Lab System added successfully");
+          alert("Assignment added successfully");
           setAlist([...aList, newAssi]);
           setAid("");
           setDes("");
           setAdate("");
         } else {
-          alert("Error in details");
+          alert("Error in details of Assignment");
         }
         onClose();
       })
       .catch(function (error) {
-        alert("Error in adding System");
+        alert("Error in adding Assignment");
         onClose();
       });
   };
 
+  
+  const handleComplete = (item = {}) => {
+    const newA = {
+      a_id: item.a_id,
+      a_status: true
+    };
+    console.log(newA);
+    const reqData = newA;
+    const reqId = id;
+    // reqData.l_systems = [...reqData.l_systems, newSys]
+
+    // console.log(reqData)
+
+    var config = {
+      method: "post",
+      url: `${backend}/update_assi/${reqId}`,
+      headers: {
+        "Content-Type": "application/json",
+      },
+      data: reqData,
+    };
+
+    axios(config)
+      .then(function (response) {
+        if (response.data.status === true) {
+          console.log(response.data);
+          alert("Assignment Status updated successfully");
+          setAlist(...aList,response.data.data)
+        } else {
+          alert("Error in details");
+        }
+
+      })
+      .catch(function (error) {
+        alert("Error in updating Assignment Status");
+      });
+  };
+
+
   const asgmCard = (item) => {
     return (
-      <Box mb="3em" bg="white" borderRadius="6px" px="3em" py="1.5em">
+      <Box mb="3em" bg={item.a_status?"grey":"white"} borderRadius="6px" px="3em" py="1.5em">
         <Flex justifyContent="space-between">
           <Text fontSize="22px" fontWeight="500">
-            {item.heading}
+            {item.a_id}
           </Text>
           <Flex opacity="0.6">
             <TimeIcon my="auto" mr="5px" h={3.5} />
             <Text fontSize="14px" my="auto">
-              {item.deadline}
+              {item.a_date}
             </Text>
           </Flex>
         </Flex>
-        <Text my="1em">{item.description}</Text>
+        <Text my="1em">{item.a_description}</Text>
+        <Text my="1em"> {"Status: "+ item.a_status}</Text>
         <Button
           ml="auto"
           bg="#87C0CD"
@@ -121,8 +171,9 @@ useEffect(()=>{
           borderRadius="10em"
           py="1em"
           px="2em"
+          onClick={()=>handleComplete(item)}
         >
-          Submit
+          {item.a_status?"Marked Incomplete" : "Mark Complete"}
         </Button>
       </Box>
     );
@@ -156,14 +207,18 @@ useEffect(()=>{
                 my="1.5em"
                 w="100%"
                 textAlign="center"
-                onClick={onClose}
+                onClick={()=> handleSubmit()}
               >
-                Add
+                Add 
               </Button>
             </Box>
           </ModalBody>
         </ModalContent>
       </Modal>
-    {assignments.map((item) => asgmCard(item))}
+    {/* if !aList
+    return null
+    else */}
+    {/* dgdfg */}
+    {course.c_assignment.map((item) => asgmCard(item))}
     </Box>;
 }

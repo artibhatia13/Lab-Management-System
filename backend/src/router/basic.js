@@ -381,8 +381,8 @@ router.post('/update_course/:id', async(req,res) =>{
 // add assignments to the course 
 
 router.post('/add_assign/:id', async(req,res) =>{
-    const newassign= req.body
-    // console.log(lsystem);
+    // const newassign= req.body
+    // console.log(newassign);
     try{
         const nassi= await Course.findOneAndUpdate({c_code:req.params.id},{...newassign})
         if (nassi) {
@@ -410,12 +410,12 @@ router.post('/add_assign/:id', async(req,res) =>{
 // update assignments of a course
 
 router.post('/update_assi/:id', async(req,res) =>{
-    // const lsystem= req.body
-    // console.log(lsystem);
+    const lsystem= req.body
+    console.log(lsystem);
     try{
         const newassi= await Course.updateOne(
-            { c_code: req.params.id, "c_systems.a_id": req.body.a_id },
-            { $set: { "c_systems.$.a_status" : req.body.s_status} }
+            { c_code: req.params.id, "c_assignment.a_id": req.body.a_id },
+            { $set: { "c_assignment.$.a_status" : req.body.a_status} }
          )
         if (newassi) {
             let success = {
