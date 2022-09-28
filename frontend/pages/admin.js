@@ -97,13 +97,22 @@ export default function Admin() {
       });
   };
 
+  const imglist = [
+    "/lab1.jpg",
+    "/lab2.jpg",
+    "/lab3.jpg",
+    "/lab1.jpg",
+    "/lab2.jpg",
+    "/lab3.jpg",
+  ];
+
   return (
     <Box bg="#fafafa">
       <AdminNav />
       <Box mx="5em" my="3em">
         <Heading text="All labs" />
         <Flex wrap="wrap">
-          {labList.map((item) => (
+          {labList.map((item, index) => (
             <Box key={item.l_code} mb="2em">
               <Link href={"/admin/lab/" + item.l_code}>
                 <Box
@@ -115,8 +124,7 @@ export default function Admin() {
                   borderRadius="6px"
                 >
                   <Image
-                    src={imag.src}
-                    h="10em"
+                    src={imglist[index]}
                     objectFit="cover"
                     borderRadius="6px 6px 0 0"
                     alt="lab_pic"

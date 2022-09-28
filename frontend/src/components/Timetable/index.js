@@ -68,7 +68,7 @@ export default function Timetable(cName) {
         ))}
       </Grid>
       {computerLab1.map((item, index) => (
-        <Grid templateColumns="repeat(7, 1fr)">
+        <Grid templateColumns="repeat(7, 1fr)" key={index}>
           <GridItem border="1px" p="1em" borderColor="#e0e0e0">
             <Text textAlign="center">{weekdays[index]}</Text>
           </GridItem>

@@ -127,7 +127,16 @@ export default function Course() {
       });
   };
 
-  const displayCard = (item) => {
+  const imglist = [
+    "/project.png",
+    "/networklab.jpg",
+    "/project.png",
+    "/networklab.jpg",
+    "/lab2.jpg",
+    "/lab3.jpg",
+  ];
+
+  const displayCard = (item, index) => {
     return (
       <Flex
         p="1em"
@@ -136,7 +145,12 @@ export default function Course() {
         w="100%"
         key={item.c_code}
       >
-        <Image src={imag.src} h="10em" borderRadius="6px" />
+        <Image
+          src={imglist[index]}
+          w="15em"
+          borderRadius="6px"
+          alt="course_pic"
+        />
         <Box ml="1em">
           <Link href={"/admin/course/" + item.c_code}>
             <Text
@@ -180,8 +194,8 @@ export default function Course() {
       <AdminNav />
       <Box mx="5em" my="3em">
         <Heading text="Courses" />
-        {couList.map((item) => (
-          <Box key={item.c_code}>{displayCard(item)}</Box>
+        {couList.map((item, index) => (
+          <Box key={item.c_code}>{displayCard(item, index)}</Box>
         ))}
 
         <Button
@@ -200,7 +214,7 @@ export default function Course() {
       <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent mt="7em">
-          <ModalHeader textAlign="center">Add Lab</ModalHeader>
+          <ModalHeader textAlign="center">Add Course</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
             <Input

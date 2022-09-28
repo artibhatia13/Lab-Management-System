@@ -20,20 +20,19 @@ import {
   ModalBody,
   ModalCloseButton,
 } from "@chakra-ui/react";
+import { AddIcon } from "@chakra-ui/icons";
 import { TimeIcon } from "@chakra-ui/icons";
-import { useState,useEffect } from "react";
+import { useState, useEffect } from "react";
 import axios from "axios";
 import backend from "../../../const";
 
-
-
-export default function AssignmentPage({course,id}) {
-  const {isOpen, onOpen, onClose} = useDisclosure();
-  const [aid ,setAid] = useState('')
-  const [des, setDes] = useState('')
-  const [adate, setAdate] = useState('')
-  const [aList, setAlist] = useState('')
-  const [list,setlist] = useState(null)
+export default function AssignmentPage({ course, id }) {
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [aid, setAid] = useState("");
+  const [des, setDes] = useState("");
+  const [adate, setAdate] = useState("");
+  const [aList, setAlist] = useState("");
+  const [list, setlist] = useState(null);
   const assignments = [
     {
       id: 1,
@@ -51,16 +50,16 @@ export default function AssignmentPage({course,id}) {
     },
   ];
 
-useEffect(()=>{
-  setAlist(course.c_assignment)
-},[aList]);
+  useEffect(() => {
+    setAlist(course.c_assignment);
+  }, [aList]);
 
   const handleSubmit = () => {
     const newAssi = {
       a_id: aid,
       a_status: false,
       a_description: des,
-      a_date:adate
+      a_date: adate,
     };
     // console.log(course)
     // console.log(id)
@@ -69,16 +68,14 @@ useEffect(()=>{
     const reqId = id;
     // setlist(aList)
     // setlist(...list,newAssi)
-    if(!reqData.c_assignment){
-      reqData.c_assignment= newAssi
-    }
-    else
-    {
-      reqData.c_assignment = [...reqData.c_assignment,newAssi]
+    if (!reqData.c_assignment) {
+      reqData.c_assignment = newAssi;
+    } else {
+      reqData.c_assignment = [...reqData.c_assignment, newAssi];
     }
     // reqData.c_assignments = [...reqData.c_assignments,newAssi]
 
-    console.log(reqData)
+    console.log(reqData);
 
     var config = {
       method: "post",
@@ -109,11 +106,10 @@ useEffect(()=>{
       });
   };
 
-  
   const handleComplete = (item = {}) => {
     const newA = {
       a_id: item.a_id,
-      a_status: true
+      a_status: true,
     };
     console.log(newA);
     const reqData = newA;
@@ -136,21 +132,25 @@ useEffect(()=>{
         if (response.data.status === true) {
           console.log(response.data);
           alert("Assignment Status updated successfully");
-          setAlist(...aList,response.data.data)
+          setAlist(...aList, response.data.data);
         } else {
           alert("Error in details");
         }
-
       })
       .catch(function (error) {
         alert("Error in updating Assignment Status");
       });
   };
 
-
   const asgmCard = (item) => {
     return (
-      <Box mb="3em" bg={item.a_status?"grey":"white"} borderRadius="6px" px="3em" py="1.5em">
+      <Box
+        mb="3em"
+        bg={item.a_status ? "grey" : "white"}
+        borderRadius="6px"
+        px="3em"
+        py="1.5em"
+      >
         <Flex justifyContent="space-between">
           <Text fontSize="22px" fontWeight="500">
             {item.a_id}
@@ -163,7 +163,7 @@ useEffect(()=>{
           </Flex>
         </Flex>
         <Text my="1em">{item.a_description}</Text>
-        <Text my="1em"> {"Status: "+ item.a_status}</Text>
+        <Text my="1em"> {"Status: " + item.a_status}</Text>
         <Button
           ml="auto"
           bg="#87C0CD"
@@ -171,54 +171,73 @@ useEffect(()=>{
           borderRadius="10em"
           py="1em"
           px="2em"
-          onClick={()=>handleComplete(item)}
+          onClick={() => handleComplete(item)}
         >
-          {item.a_status?"Marked Incomplete" : "Mark Complete"}
+          {/* {item.a_status ? "Marked Incomplete" : "Mark Complete"} */}
+          Submit Assignment
         </Button>
       </Box>
     );
   };
 
-  return <Box>
-    <Button
-        ml="auto"
-        bg="#fff000"
+  return (
+    <Box>
+      {/* <Button
+        mb="1em"
+        bg="#87C0CD"
         color="white"
         borderRadius="10em"
         py="1em"
         px="2em"
+        leftIcon={<AddIcon />}
         onClick={onOpen}
       >
-      Add Assignment
-    </Button>
-    <Modal isOpen={isOpen} onClose={onClose}>
+        Add Assignment
+      </Button> */}
+      <Modal isOpen={isOpen} onClose={onClose}>
         <ModalOverlay />
         <ModalContent mt="7em">
           <ModalHeader textAlign="center">Edit Course Details</ModalHeader>
           <ModalCloseButton />
           <ModalBody>
-            <Input placeholder="Assignment Id"  value={aid} onChange={e => setAid(e.target.value)}/>
-            <Input placeholder="Assignment Description"  value={des} onChange={e => setDes(e.target.value)}/>
-            <Input placeholder="Assignment Deadline"  value={adate} onChange={e => setAdate(e.target.value)}/>
+            <Input
+              mb="1em"
+              placeholder="Assignment Id"
+              value={aid}
+              onChange={(e) => setAid(e.target.value)}
+            />
+            <Input
+              mb="1em"
+              placeholder="Assignment Description"
+              value={des}
+              onChange={(e) => setDes(e.target.value)}
+            />
+            <Input
+              mb="1em"
+              placeholder="Assignment Deadline"
+              value={adate}
+              onChange={(e) => setAdate(e.target.value)}
+            />
             <Box ml="auto" w="6em">
               <Button
                 bg="#87C0CD"
                 color="white"
-                my="1.5em"
+                mb="1em"
                 w="100%"
                 textAlign="center"
-                onClick={()=> handleSubmit()}
+                onClick={() => handleSubmit()}
               >
-                Add 
+                Add
               </Button>
             </Box>
           </ModalBody>
         </ModalContent>
       </Modal>
-    {/* if !aList
+      {/* if !aList
     return null
     else */}
-    {/* dgdfg */}
-    {course.c_assignment.map((item) => asgmCard(item))}
-    </Box>;
+      {/* dgdfg */}
+      {course.c_assignment.map((item) => asgmCard(item))}
+    </Box>
+  );
 }
